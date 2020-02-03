@@ -31,4 +31,4 @@ async def on_ready():
 
 #Discord.py was rewritten the latest version is known as (rewrite) due to this i recommend using python 3.7 and up to avoid errors/conflicts
 
-client.run(os.environ['DISCORD_TOKEN'])
+client.run(os.environ['DISCORD_TOKEN']) #this uses a OS Environment Variable so the token isn't exposed
