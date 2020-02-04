@@ -15,8 +15,8 @@ A few basic bot commands: !Beginner !Intermediate !Advanced
 
 Moderators will have the ability to scrape the interwebs for discovering new programming projects. Each project will be ranked and then properly categorized. Beginner, Intermediate and Advanced projects will be stored as lists and accessed per user. As the user completes the projects, they will receive a score and the project will be removed from the list for that user only.
 
-requirements:
-python==3.7
-discord.py==1.2.5
-beautifulsoup4==4.8.2
+requirements:\n
+python==3.7\n
+discord.py==1.2.5\n
+beautifulsoup4==4.8.2\n
 
