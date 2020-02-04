@@ -12,6 +12,23 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("!"))
 async def on_ready():
     await client.change_presence(activity= discord.Game("The Witcher 3"))
     print("Bot is Ready. ")
+
+# member has joined server
+@client.event
+async def on_member_join(member):
+    print(f'{member} has joined the server')
+
+# member has left server
+@client.event
+async def on_member_remove(member):
+    print(f'{member} has left the server')
+
+# check ping of bot
+@client.command()
+async def ping(ctx):
+    await ctx.send(f'Pong! {round(client.latency * 1000)}.ms')
+
+
 ######################## ZTM DISCORD BOT #########################
 #This project will start off simple and as we progress we can make it more complex with cogs(OOP)
 
