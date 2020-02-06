@@ -1,6 +1,6 @@
 # ZTM-Python-Discord-Bot-Almuni
 
-## A Discord bot written in Python(ZTM)
+## A Discord bot written in Python by and for the ZTM community
 
 ### Packages we will be starting with:
 * discord.py: View documentation [here.](https://discordpy.readthedocs.io/en/latest/)
