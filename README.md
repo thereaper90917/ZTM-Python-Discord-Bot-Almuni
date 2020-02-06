@@ -1,27 +1,25 @@
 # ZTM-Python-Discord-Bot-Almuni
- A Discord bot Written in python(ZTM)
 
-######################## Packages we will be starting with #########################
-#Discord.py for documentation refer to  https://discordpy.readthedocs.io/en/latest/
+## A Discord bot written in Python(ZTM)
 
+### Packages we will be starting with:
+* discord.py: View documentation [here.](https://discordpy.readthedocs.io/en/latest/)
 
-######################## IMPORTAN NOTICES WHEN USING DISCORD.PY #########################
+### NOTE:
+* The latest version of discord.py is v1.3.1. Due to this, using python v3.7 and up is recommended so as to avoid errors/conflicts.
 
-#Discord.py was rewritten the latest version is known as (rewrite) due to this i recommend using python 3.7 and up to avoid errors/conflicts
+* The goal behind this bot is to help members find projects. Each project will be categorized under Beginner, Intermediate or Advanced.
 
-The goal behind this bot is to help members find projects. Each project will be categorized under Beginner, Intermediate or Advanced.
+* Moderators will have the ability to scrape the web for discovering new programming projects. Each project will be ranked and then properly categorized. Beginner, Intermediate and Advanced projects will be stored as lists and accessed per user. As the user completes the projects, they will receive a score and the project will be removed from the list for that user only.
 
-A few basic bot commands: !Beginner !Intermediate !Advanced
+* Requirements:
+    * python v3.7
+    * discord.py v1.2.5
+    * requests v2.22.0
+    * beautifulsoup4 v4.8.2
 
-Moderators will have the ability to scrape the interwebs for discovering new programming projects. Each project will be ranked and then properly categorized. Beginner, Intermediate and Advanced projects will be stored as lists and accessed per user. As the user completes the projects, they will receive a score and the project will be removed from the list for that user only.
-
-requirements:
-
-python==3.7
-
-discord.py==1.2.5
-
-requests==2.22.0
-
-beautifulsoup4==4.8.2
+**Here are a few basic bot commands:**
+* !Beginner 
+* !Intermediate 
+* !Advanced
 
