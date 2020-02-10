@@ -43,6 +43,7 @@ async def on_message(message):
 		await message.channel.send(
 				f'> {quoteContent} \n— {quoteAuthor}'
 			)
+	await client.process_commands(message)
 
 ######################## ZTM DISCORD BOT #########################
 #This project will start off simple and as we progress we can make it more complex with cogs(OOP)
