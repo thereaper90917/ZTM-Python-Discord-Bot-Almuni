@@ -1,5 +1,6 @@
 import discord
 import os
+import requests
 from discord.ext import commands, tasks
 
 
@@ -28,6 +29,20 @@ async def on_member_remove(member):
 async def ping(ctx):
     await ctx.send(f'Pong! {round(client.latency * 1000)}.ms')
 
+# generate random quote
+@client.event
+async def on_message(message):
+	if message.author == client.user:
+		return
+	if message.content == '!random':
+		url = ('https://api.quotable.io/random')
+		response = requests.get(url)
+		quote = response.json()
+		quoteContent = quote['content']
+		quoteAuthor = quote['author']
+		await message.channel.send(
+				f'> {quoteContent} \n— {quoteAuthor}'
+			)
 
 ######################## ZTM DISCORD BOT #########################
 #This project will start off simple and as we progress we can make it more complex with cogs(OOP)
