@@ -27,22 +27,37 @@ async def on_member_remove(member):
 # check ping of bot
 @client.command()
 async def ping(ctx):
-    await ctx.send(f'Pong! {round(client.latency * 1000)}.ms')
+    await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
+
 
 # generate random quote
 @client.event
 async def on_message(message):
-	if message.author == client.user:
-		return
-	if message.content == '!random':
-		url = ('https://api.quotable.io/random')
-		response = requests.get(url)
-		quote = response.json()
-		quoteContent = quote['content']
-		quoteAuthor = quote['author']
-		await message.channel.send(
-				f'> {quoteContent} \n— {quoteAuthor}'
-			)
+    #statement for bot not reply to itself
+    if message.author == client.user:
+        return
+    if message.content == '!random':
+        url = ('https://api.quotable.io/random')
+        response = requests.get(url)
+        quote = response.json()
+        quoteContent = quote['content']
+        quoteAuthor = quote['author']
+        await message.channel.send(f'> {quoteContent} \n— {quoteAuthor}')
+    await client.process_commands(message)
+
+
+@client.command(aliases=['beginner', 'Beginner'])
+async def _beginner(ctx):
+    await ctx.send(f'Testing beginner')
+
+@client.command(aliases=['intermediate', 'Intermediate'])
+async def _intermediate(ctx):
+    await ctx.send(f'Testing intermediate')
+
+@client.command(aliases=['advanced', 'Advanced'])
+async def _advanced(ctx):
+    await ctx.send(f'Testing advanced')
+
 
 ######################## ZTM DISCORD BOT #########################
 #This project will start off simple and as we progress we can make it more complex with cogs(OOP)
