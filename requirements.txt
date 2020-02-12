@@ -1,5 +1,5 @@
-discord.py==1.2.5
-requests==2.22.0
-beautifulsoup4==4.8.2
+discord.py
+requests
+beautifulsoup4
 sqlite3
 database_user
