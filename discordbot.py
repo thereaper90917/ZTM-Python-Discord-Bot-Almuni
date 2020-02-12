@@ -1,8 +1,29 @@
+###################### ZTM DISCORD BOT #######################
+# This project will start off simple and as we progress we can make it more complex with cogs(OOP)
+
+# import discord.py first
+
+# first we need to get the bot to join a discord server
+# after we connect to a discord server we will print all the users that join or leave the server
+# after this we will start with basic commands
+# the first command will be a simple reply from the bot example if we do !ping it should reply "pong"
+
+
+################ Packages we will be starting with ###################
+# Discord.py for documentation refer to  https://discordpy.readthedocs.io/en/latest/
+
+
+############## IMPORTANT NOTICES WHEN USING DISCORD.PY ####################
+
+# Discord.py was rewritten the latest version is known as (rewrite) due to this i recommend using python 3.7 and up
+# to avoid errors/conflicts
+
 import discord
 import sqlite3
 from database_user import Database
 import os
 import requests
+import asyncio
 from discord.ext import commands, tasks
 
 client = commands.Bot(command_prefix=commands.when_mentioned_or("!"))
@@ -59,6 +80,15 @@ async def beginner(ctx):
     await ctx.send(f'Testing beginner')
 
 
+@client.command()
+async def reminder(ctx, *args):
+    usage = "Set a reminder by using the command !reminder <#minutes> <message>"
+    time_scale = {'h': 120,
+                  'H': 120,
+                  'm': 60,
+                  'M': 60,
+                  's': 1,
+                  'S': 1}
 
 @client.command(aliases=['!advanced', '!Advanced'])
 async def advanced(ctx):
@@ -72,24 +102,16 @@ async def intermediate(ctx):
 
 ######################## ZTM DISCORD BOT #########################
 # This project will start off simple and as we progress we can make it more complex with cogs(OOP)
+    if len(args) != 2:
+        await ctx.send(usage)
+        return
 
-# import discord.py first
+    sleep_time = int(args[0])
+    reminder_message = args[1]
 
-# first we need to get the bot to join a discord server
-# after we connect to a discord server we will print all the users that join or leave the server
-# after this we will start with basic commands
-# the first command will be a simple reply from the bot example if we do !ping it should reply "pong"
+    await asyncio.sleep(sleep_time)
+    await ctx.send(reminder_message)
 
-
-######################## Packages we will be starting with #########################
-# Discord.py for documentation refer to  https://discordpy.readthedocs.io/en/latest/
-
-
-######################## IMPORTAN NOTICES WHEN USING DISCORD.PY #########################
-
-# Discord.py was rewritten the latest version is known as (rewrite) due to this i recommend using python 3.7 and up to avoid errors/conflicts
-
-############################################### TRELLO CLONE ###################################################
 @client.event
 async def on_message(message):
      conn = sqlite3.connect('database.db')#if you get an error please use absolute/explicit path example C:\discord\database.db
