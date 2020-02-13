@@ -31,7 +31,7 @@ async def on_member_remove(member):
 async def ping(ctx):
     await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
 
- 
+
 # generate random quote
 @client.command()
 async def random(ctx):
@@ -54,7 +54,6 @@ async def dad(ctx):
     await ctx.send(f'> {joke}')
 
 
-
 @client.command(aliases=['!beginner', '!Beginner'])
 async def beginner(ctx):
     await ctx.send(f'Testing beginner')
@@ -66,17 +65,10 @@ async def advanced(ctx):
     await ctx.send(f'Testing advanced')
 
 
+
 @client.command(aliases=['!intermediate', '!Intermediate'])
 async def intermediate(ctx):
     await ctx.send(f'Testing intermediate')
-
-
-
-
-
-
-
-
 
 ######################## ZTM DISCORD BOT #########################
 # This project will start off simple and as we progress we can make it more complex with cogs(OOP)
