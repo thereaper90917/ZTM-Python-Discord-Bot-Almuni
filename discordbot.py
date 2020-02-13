@@ -19,7 +19,6 @@
 # to avoid errors/conflicts
 import logging
 import discord
-import sqlite3
 import todo as db
 import os
 import requests
@@ -31,12 +30,6 @@ logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='./discordbot.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 client = commands.Bot(command_prefix=commands.when_mentioned_or("!"))
-
-
-# todo_db = '/Users/jbeck/development/repos/personal/ZTM-Python-Discord-Bot-Almuni/database.db'
-# todo_conn = sqlite3.connect(todo_db)
-#
-# todo_c = todo_conn.cursor()
 
 
 @client.event
