@@ -31,77 +31,7 @@ async def on_member_remove(member):
 async def ping(ctx):
     await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
 
-
-
-
-# provide random dad joke
-@client.command()
-async def dad(ctx):
-    url = 'https://icanhazdadjoke.com/'
-    headers = {'Accept': 'application/json'}
-    response = requests.get(url, headers=headers)
-    joke = response.json()['joke']
-    await ctx.send(f'> {joke}')
-
-
-# generate random quote
-@client.event
-async def on_message(message):
-    #statement for bot not reply to itself
-    if message.author == client.user:
-        return
-    if message.content == '!random':
-        url = ('https://api.quotable.io/random')
-        response = requests.get(url)
-        quote = response.json()
-        quoteContent = quote['content']
-        quoteAuthor = quote['author']
-        await message.channel.send(f'> {quoteContent} \n— {quoteAuthor}')
-    await client.process_commands(message)
-
-
-@client.command(aliases=['beginner', 'Beginner'])
-async def _beginner(ctx):
-    await ctx.send(f'Testing beginner')
-
-
-@client.command(aliases=['intermediate', 'Intermediate'])
-async def _intermediate(ctx):
-    await ctx.send(f'Testing intermediate')
-
-
-@client.command(aliases=['advanced', 'Advanced'])
-async def _advanced(ctx):
-    await ctx.send(f'Testing advanced')
-
-
-# provide random dad joke
-@client.command()
-async def dad(ctx):
-    url = 'https://icanhazdadjoke.com/'
-    headers = {'Accept': 'application/json'}
-    response = requests.get(url, headers=headers)
-    joke = response.json()['joke']
-    await ctx.send(f'> {joke}')
-
-
-
-@client.command(aliases=['beginner', 'Beginner'])
-async def _beginner(ctx):
-    await ctx.send(f'Testing beginner')
-
-
-@client.command(aliases=['intermediate', 'Intermediate'])
-async def _intermediate(ctx):
-    await ctx.send(f'Testing intermediate')
-
-
-@client.command(aliases=['advanced', 'Advanced'])
-async def _advanced(ctx):
-    await ctx.send(f'Testing advanced')
-
-
-
+ 
 # generate random quote
 @client.command()
 async def random(ctx):
@@ -111,6 +41,42 @@ async def random(ctx):
     quote_content = quote['content']
     quote_author = quote['author']
     await ctx.send(f'> {quote_content} \n— {quote_author}')
+
+
+
+# provide random dad joke
+@client.command()
+async def dad(ctx):
+    url = 'https://icanhazdadjoke.com/'
+    headers = {'Accept': 'application/json'}
+    response = requests.get(url, headers=headers)
+    joke = response.json()['joke']
+    await ctx.send(f'> {joke}')
+
+
+
+@client.command(aliases=['!beginner', '!Beginner'])
+async def beginner(ctx):
+    await ctx.send(f'Testing beginner')
+
+
+
+@client.command(aliases=['!advanced', '!Advanced'])
+async def advanced(ctx):
+    await ctx.send(f'Testing advanced')
+
+
+@client.command(aliases=['!intermediate', '!Intermediate'])
+async def intermediate(ctx):
+    await ctx.send(f'Testing intermediate')
+
+
+
+
+
+
+
+
 
 ######################## ZTM DISCORD BOT #########################
 # This project will start off simple and as we progress we can make it more complex with cogs(OOP)
