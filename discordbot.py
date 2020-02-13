@@ -19,7 +19,6 @@
 # to avoid errors/conflicts
 import logging
 import discord
-import sqlite3
 import todo as db
 import os
 import requests
@@ -31,12 +30,6 @@ logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='./discordbot.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 client = commands.Bot(command_prefix=commands.when_mentioned_or("!"))
-
-
-# todo_db = '/Users/jbeck/development/repos/personal/ZTM-Python-Discord-Bot-Almuni/database.db'
-# todo_conn = sqlite3.connect(todo_db)
-#
-# todo_c = todo_conn.cursor()
 
 
 @client.event
@@ -63,18 +56,6 @@ async def on_member_remove(member):
 async def ping(ctx):
     """ Ping times from a bot? """
     await ctx.send(f'Pong! {round(client.latency * 1000)}.ms')
-
-
-# generate random quote
-@client.command()
-async def random(ctx):
-    url = 'https://api.quotable.io/random'
-    response = requests.get(url)
-    quote = response.json()
-    quote_content = quote['content']
-    quote_author = quote['author']
-    await ctx.send(f'> {quote_content} \n— {quote_author}')
-
 
 
 # provide random dad joke
@@ -105,6 +86,11 @@ async def beginner(ctx):
     await ctx.send(f'Testing beginner')
 
 
+@client.command(aliases=['!advanced', '!Advanced'])
+async def advanced(ctx):
+    await ctx.send(f'Testing advanced')
+
+
 @client.command()
 async def reminder(ctx, *args):
     usage = "Set a reminder by using the command !reminder <#minutes> <message>"
@@ -118,9 +104,6 @@ async def reminder(ctx, *args):
     if len(args) != 2:
         await ctx.send(usage)
         return
-@client.command(aliases=['!advanced', '!Advanced'])
-async def advanced(ctx):
-    await ctx.send(f'Testing advanced')
 
     sleep_time = int(args[0])
     reminder_message = args[1]
@@ -128,9 +111,14 @@ async def advanced(ctx):
     await asyncio.sleep(sleep_time)
     await ctx.send(reminder_message)
 
+
 @client.command()
 async def todo(ctx, *args):
     """ Add a needed to-do item to the list of bots needs """
+    if len(ctx.args) < 2:
+        await ctx.send("Usage: !todo <add/remote/view/update> <task>")
+        return
+
     if ctx.args[1] == 'add':
         search = ctx.message.content.replace('!todo add', '')
         add_data = db.Database("need", search, ctx.author.name, '')
@@ -166,11 +154,6 @@ async def todo(ctx, *args):
         input_data = ctx.message.content.replace('!todo update', '')
         update_data = db.Database('need', input_data, '', ctx.author)
         db.update_complete(update_data, ctx.author.name)
-
-    else:
-        ctx.send("Usage: !todo <add/remote/view/update> <task>")
-
-    await client.process_commands(ctx)
 
 
 client.run(os.environ['DISCORD_TOKEN'])  # this uses a OS Environment Variable so the token isn't exposed

@@ -1,6 +1,6 @@
 import sqlite3
 
-todo_db = '/Users/jbeck/development/repos/personal/ZTM-Python-Discord-Bot-Almuni/database.db'
+todo_db = 'database.db'
 todo_conn = sqlite3.connect(todo_db)
 
 todo_c = todo_conn.cursor()
@@ -9,7 +9,7 @@ todo_c = todo_conn.cursor()
 class Database:
     """A sample Employee class"""
 
-    def __init__(self, need, command, complete,completed):
+    def __init__(self, need, command, complete, completed):
         self.need = need
         self.command = command
         self.complete = complete
