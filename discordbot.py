@@ -29,7 +29,8 @@ async def on_member_remove(member):
 # check ping of bot
 @client.command()
 async def ping(ctx):
-    await ctx.send(f'Pong! {round(client.latency * 1000)}.ms')
+    await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
+
 
 
 # provide random dad joke
@@ -42,6 +43,23 @@ async def dad(ctx):
     await ctx.send(f'> {joke}')
 
 
+
+@client.command(aliases=['beginner', 'Beginner'])
+async def _beginner(ctx):
+    await ctx.send(f'Testing beginner')
+    
+
+@client.command(aliases=['intermediate', 'Intermediate'])
+async def _intermediate(ctx):
+    await ctx.send(f'Testing intermediate')
+    
+
+@client.command(aliases=['advanced', 'Advanced'])
+async def _advanced(ctx):
+    await ctx.send(f'Testing advanced')
+    
+
+
 # generate random quote
 @client.command()
 async def random(ctx):
@@ -51,8 +69,6 @@ async def random(ctx):
     quote_content = quote['content']
     quote_author = quote['author']
     await ctx.send(f'> {quote_content} \n— {quote_author}')
-
-
 
 ######################## ZTM DISCORD BOT #########################
 # This project will start off simple and as we progress we can make it more complex with cogs(OOP)
@@ -72,12 +88,11 @@ async def random(ctx):
 ######################## IMPORTAN NOTICES WHEN USING DISCORD.PY #########################
 
 # Discord.py was rewritten the latest version is known as (rewrite) due to this i recommend using python 3.7 and up to avoid errors/conflicts
-=======
 
 ############################################### TRELLO CLONE ###################################################
 @client.event
 async def on_message(message):
-     conn = sqlite3.connect('database.db')
+     conn = sqlite3.connect('database.db')#if you get an error please use absolute/explicit path example C:\discord\database.db
 
      c = conn.cursor()
 
