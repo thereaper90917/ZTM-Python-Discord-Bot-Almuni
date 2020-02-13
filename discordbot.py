@@ -33,6 +33,48 @@ async def ping(ctx):
 
 
 
+
+# provide random dad joke
+@client.command()
+async def dad(ctx):
+    url = 'https://icanhazdadjoke.com/'
+    headers = {'Accept': 'application/json'}
+    response = requests.get(url, headers=headers)
+    joke = response.json()['joke']
+    await ctx.send(f'> {joke}')
+
+
+# generate random quote
+@client.event
+async def on_message(message):
+    #statement for bot not reply to itself
+    if message.author == client.user:
+        return
+    if message.content == '!random':
+        url = ('https://api.quotable.io/random')
+        response = requests.get(url)
+        quote = response.json()
+        quoteContent = quote['content']
+        quoteAuthor = quote['author']
+        await message.channel.send(f'> {quoteContent} \n— {quoteAuthor}')
+    await client.process_commands(message)
+
+
+@client.command(aliases=['beginner', 'Beginner'])
+async def _beginner(ctx):
+    await ctx.send(f'Testing beginner')
+
+
+@client.command(aliases=['intermediate', 'Intermediate'])
+async def _intermediate(ctx):
+    await ctx.send(f'Testing intermediate')
+
+
+@client.command(aliases=['advanced', 'Advanced'])
+async def _advanced(ctx):
+    await ctx.send(f'Testing advanced')
+
+
 # provide random dad joke
 @client.command()
 async def dad(ctx):
@@ -47,17 +89,17 @@ async def dad(ctx):
 @client.command(aliases=['beginner', 'Beginner'])
 async def _beginner(ctx):
     await ctx.send(f'Testing beginner')
-    
+
 
 @client.command(aliases=['intermediate', 'Intermediate'])
 async def _intermediate(ctx):
     await ctx.send(f'Testing intermediate')
-    
+
 
 @client.command(aliases=['advanced', 'Advanced'])
 async def _advanced(ctx):
     await ctx.send(f'Testing advanced')
-    
+
 
 
 # generate random quote
@@ -112,19 +154,19 @@ async def on_message(message):
             zlist =[]
             items =  c.fetchall()
             for item in items:
-                t = str(item[1]).replace('[','') +" Created By: " + str(item[2]).replace('[','') + ":   Completed By: "+ str(item[3]).replace('[','') 
+                t = str(item[1]).replace('[','') +" Created By: " + str(item[2]).replace('[','') + ":   Completed By: "+ str(item[3]).replace('[','')
                 zlist.append(f'Needed: {t} ')
 
             new_string=str(zlist).replace("['","").replace("]","").replace("', ' ",'\n').replace("', '",'\n')
             return new_string
-       
+
      def update_complete(emp, completed):
             with conn:
                     c.execute("""UPDATE needs SET completed = :completed
                          WHERE need = :need AND command = :command""",
                     {'need': emp.need, 'command': emp.command, 'completed': completed})
-     
-     
+
+
      if message.author.bot:
         return
      if message.content.startswith('!add'):
@@ -138,7 +180,7 @@ async def on_message(message):
         description= (f'{search}')
             )
         await message.channel.send(embed=embed)
-                
+
      if message.content.startswith('!view'):
         embed = discord.Embed(
         colour = discord.Colour.dark_grey(),
@@ -146,7 +188,7 @@ async def on_message(message):
         description= (f'{view_data()}')
             )
         await message.channel.send(embed=embed)
-      
+
      if message.content.startswith('!remove'):
             input_del = message.content.replace('!remove','')
             delete_data = Database("need",input_del,'', '')
@@ -157,17 +199,17 @@ async def on_message(message):
             description= (f'{input_del}')
                 )
             await message.channel.send(embed=embed)
-     
-     
+
+
      if message.content.startswith('!update'):
             input_data = message.content.replace('!update','')
             update_data = Database('need',input_data,'',message.author)
             update_complete(update_data,message.author.name)
-            
-           
-                
-        
-    
+
+
+
+
+
      await client.process_commands(message)
 
 
