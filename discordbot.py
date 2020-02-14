@@ -4,6 +4,7 @@ from database_user import Database
 import os
 import requests
 from discord.ext import commands, tasks
+import praw
 
 client = commands.Bot(command_prefix=commands.when_mentioned_or("!"))
 
@@ -53,22 +54,52 @@ async def dad(ctx):
     joke = response.json()['joke']
     await ctx.send(f'> {joke}')
 
-
+#Testing !beginner
 @client.command(aliases=['!beginner', '!Beginner'])
 async def beginner(ctx):
     await ctx.send(f'Testing beginner')
 
 
-
+#Testing !advanced
 @client.command(aliases=['!advanced', '!Advanced'])
 async def advanced(ctx):
     await ctx.send(f'Testing advanced')
 
 
-
+#Testing !intermediate
 @client.command(aliases=['!intermediate', '!Intermediate'])
 async def intermediate(ctx):
     await ctx.send(f'Testing intermediate')
+
+
+# Generate top 6 reddit post based on subreddit input
+@client.command(aliases=['reddit'])
+async def _beginner(ctx, *args):
+    response = ''
+    size = 6
+    length = len(args)
+    arg = 'random'
+    
+    if length > 0:
+        arg = args[0]
+
+    reddit = praw.Reddit(client_id=os.environ['CLIENT_ID'],
+                         client_secret=os.environ['CLIENT_SECRET'],
+                         user_agent='my user agent')
+
+    response = 'Top Ten ' + arg + ' Subrredit Posts \n--------------------------------------\n'
+
+    try:
+        for submission in reddit.subreddit(arg).hot(limit=size):
+            # print(submission.title)
+            response = response + '\n' + submission.title + '\n<' + submission.url + '>' + '\n'
+
+    except Exception as e: 
+        # print(e)   
+        response = arg + ' is not a valid subreddit!'
+
+
+    await ctx.send(f'{response}')
 
 ######################## ZTM DISCORD BOT #########################
 # This project will start off simple and as we progress we can make it more complex with cogs(OOP)
