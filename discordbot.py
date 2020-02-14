@@ -17,21 +17,32 @@
 
 # Discord.py was rewritten the latest version is known as (rewrite) due to this i recommend using python 3.7 and up
 # to avoid errors/conflicts
-
+import logging
 import discord
 import sqlite3
-from database_user import Database
+import todo as db
 import os
 import requests
 import asyncio
 from discord.ext import commands, tasks
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='./discordbot.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 client = commands.Bot(command_prefix=commands.when_mentioned_or("!"))
+
+
+# todo_db = '/Users/jbeck/development/repos/personal/ZTM-Python-Discord-Bot-Almuni/database.db'
+# todo_conn = sqlite3.connect(todo_db)
+#
+# todo_c = todo_conn.cursor()
 
 
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Game("The Witcher 3"))
+    logging.debug("Bot is ready.")
     print("Bot is Ready. ")
 
 
@@ -50,7 +61,8 @@ async def on_member_remove(member):
 # check ping of bot
 @client.command()
 async def ping(ctx):
-    await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
+    """ Ping times from a bot? """
+    await ctx.send(f'Pong! {round(client.latency * 1000)}.ms')
 
 
 # generate random quote
@@ -68,6 +80,7 @@ async def random(ctx):
 # provide random dad joke
 @client.command()
 async def dad(ctx):
+    """ Returns a random dad joke from icanhazdadjoke.com """
     url = 'https://icanhazdadjoke.com/'
     headers = {'Accept': 'application/json'}
     response = requests.get(url, headers=headers)
@@ -75,6 +88,18 @@ async def dad(ctx):
     await ctx.send(f'> {joke}')
 
 
+# generate random quote
+@client.command()
+async def random(ctx):
+    """ Returns a random quote """
+    url = 'https://api.quotable.io/random'
+    response = requests.get(url)
+    quote = response.json()
+    quote_content = quote['content']
+    quote_author = quote['author']
+    await ctx.send(f'> {quote_content} \n— {quote_author}')
+    
+    
 @client.command(aliases=['!beginner', '!Beginner'])
 async def beginner(ctx):
     await ctx.send(f'Testing beginner')
@@ -103,85 +128,49 @@ async def advanced(ctx):
     await asyncio.sleep(sleep_time)
     await ctx.send(reminder_message)
 
-@client.event
-async def on_message(message):
-     conn = sqlite3.connect('database.db')#if you get an error please use absolute/explicit path example C:\discord\database.db
-
-     c = conn.cursor()
-
-
-     def insert_emp(emp):
-         with conn:
-            c.execute("INSERT INTO needs VALUES (:need, :command, :complete, :completed)", {'need': emp.need, 'command': emp.command, 'complete':emp.complete,'completed':emp.completed})
-
-
-     def remove_emp(emp):
-         with conn:
-            c.execute("DELETE from needs WHERE need= :need AND command = :command",
-                  {'need': emp.need, 'command': emp.command})
-     def view_data():
-        with conn:
-            c.execute("SELECT * FROM needs")
-            zlist =[]
-            items =  c.fetchall()
-            for item in items:
-                t = str(item[1]).replace('[','') +" Created By: " + str(item[2]).replace('[','') + ":   Completed By: "+ str(item[3]).replace('[','')
-                zlist.append(f'Needed: {t} ')
-
-            new_string=str(zlist).replace("['","").replace("]","").replace("', ' ",'\n').replace("', '",'\n')
-            return new_string
-
-     def update_complete(emp, completed):
-            with conn:
-                    c.execute("""UPDATE needs SET completed = :completed
-                         WHERE need = :need AND command = :command""",
-                    {'need': emp.need, 'command': emp.command, 'completed': completed})
-
-
-     if message.author.bot:
-        return
-     if message.content.startswith('!add'):
-        search = message.content.replace('!add','')
-        add_data = Database("need",search ,message.author.name,'')
-        print(message.author.name)
-        insert_emp(add_data)
+@client.command()
+async def todo(ctx, *args):
+    """ Add a needed to-do item to the list of bots needs """
+    if ctx.args[1] == 'add':
+        search = ctx.message.content.replace('!todo add', '')
+        add_data = db.Database("need", search, ctx.author.name, '')
+        print(ctx.author.name)
+        db.insert_emp(add_data)
         embed = discord.Embed(
-        colour = discord.Colour.dark_grey(),
-        title = ("Added the following feature to be done"),
-        description= (f'{search}')
-            )
-        await message.channel.send(embed=embed)
+            colour=discord.Colour.dark_grey(),
+            title="Added the following feature to be done",
+            description=f'{search}'
+        )
+        await ctx.channel.send(embed=embed)
 
-     if message.content.startswith('!view'):
+    elif ctx.args[1] == 'view':
         embed = discord.Embed(
-        colour = discord.Colour.dark_grey(),
-        title = ("Bot Stuff Needed to be Done"),
-        description= (f'{view_data()}')
-            )
-        await message.channel.send(embed=embed)
+            colour=discord.Colour.dark_grey(),
+            title="Bot Stuff Needed to be Done",
+            description=f'{db.view_data()}'
+        )
+        await ctx.channel.send(embed=embed)
 
-     if message.content.startswith('!remove'):
-            input_del = message.content.replace('!remove','')
-            delete_data = Database("need",input_del,'', '')
-            remove_emp(delete_data)
-            embed = discord.Embed(
-            colour = discord.Colour.dark_grey(),
-            title = ("Deleted the Following"),
-            description= (f'{input_del}')
-                )
-            await message.channel.send(embed=embed)
+    elif ctx.args[1] == 'remove':
+        input_del = ctx.message.content.replace('!todo remove', '')
+        delete_data = db.Database("need", input_del, '', '')
+        db.remove_emp(delete_data)
+        embed = discord.Embed(
+            colour=discord.Colour.dark_grey(),
+            title="Deleted the Following",
+            description=f'{input_del}'
+        )
+        await ctx.channel.send(embed=embed)
 
+    elif ctx.args[1] == 'update':
+        input_data = ctx.message.content.replace('!todo update', '')
+        update_data = db.Database('need', input_data, '', ctx.author)
+        db.update_complete(update_data, ctx.author.name)
 
-     if message.content.startswith('!update'):
-            input_data = message.content.replace('!update','')
-            update_data = Database('need',input_data,'',message.author)
-            update_complete(update_data,message.author.name)
+    else:
+        ctx.send("Usage: !todo <add/remote/view/update> <task>")
 
-
-
-
-
-     await client.process_commands(message)
+    await client.process_commands(ctx)
 
 
 client.run(os.environ['DISCORD_TOKEN'])  # this uses a OS Environment Variable so the token isn't exposed
