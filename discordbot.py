@@ -22,7 +22,6 @@ import discord
 import todo as db
 import os
 import requests
-import asyncio
 from discord.ext import commands, tasks
 
 logger = logging.getLogger(__name__)
@@ -83,33 +82,14 @@ async def random(ctx):
     
 @client.command(aliases=['!beginner', '!Beginner'])
 async def beginner(ctx):
+    """ Gets a set of beginner exercises to work on"""
     await ctx.send(f'Testing beginner')
 
 
 @client.command(aliases=['!advanced', '!Advanced'])
 async def advanced(ctx):
+    """ Gets a set of advanced exercises to work on"""
     await ctx.send(f'Testing advanced')
-
-
-@client.command()
-async def reminder(ctx, *args):
-    usage = "Set a reminder by using the command !reminder <#minutes> <message>"
-    time_scale = {'h': 120,
-                  'H': 120,
-                  'm': 60,
-                  'M': 60,
-                  's': 1,
-                  'S': 1}
-
-    if len(args) != 2:
-        await ctx.send(usage)
-        return
-
-    sleep_time = int(args[0])
-    reminder_message = args[1]
-
-    await asyncio.sleep(sleep_time)
-    await ctx.send(reminder_message)
 
 
 @client.command()
