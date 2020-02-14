@@ -90,21 +90,12 @@ async def reminder(ctx, *args):
                   's': 1,
                   'S': 1}
 
-@client.command(aliases=['!advanced', '!Advanced'])
-async def advanced(ctx):
-    await ctx.send(f'Testing advanced')
-
-
-
-@client.command(aliases=['!intermediate', '!Intermediate'])
-async def intermediate(ctx):
-    await ctx.send(f'Testing intermediate')
-
-######################## ZTM DISCORD BOT #########################
-# This project will start off simple and as we progress we can make it more complex with cogs(OOP)
     if len(args) != 2:
         await ctx.send(usage)
         return
+@client.command(aliases=['!advanced', '!Advanced'])
+async def advanced(ctx):
+    await ctx.send(f'Testing advanced')
 
     sleep_time = int(args[0])
     reminder_message = args[1]
