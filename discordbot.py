@@ -23,6 +23,7 @@ import todo as db
 import os
 import requests
 from discord.ext import commands, tasks
+import praw
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -67,7 +68,7 @@ async def dad(ctx):
     joke = response.json()['joke']
     await ctx.send(f'> {joke}')
 
-
+    
 # generate random quote
 @client.command()
 async def random(ctx):
@@ -80,16 +81,54 @@ async def random(ctx):
     await ctx.send(f'> {quote_content} \n— {quote_author}')
     
     
+#Testing !beginner
 @client.command(aliases=['!beginner', '!Beginner'])
 async def beginner(ctx):
     """ Gets a set of beginner exercises to work on"""
     await ctx.send(f'Testing beginner')
 
 
+#Testing !intermediate
+@client.command(aliases=['!intermediate', '!Intermediate'])
+async def intermediate(ctx):
+    await ctx.send(f'Testing intermediate')
+
+
+#Testing !advanced
 @client.command(aliases=['!advanced', '!Advanced'])
 async def advanced(ctx):
     """ Gets a set of advanced exercises to work on"""
     await ctx.send(f'Testing advanced')
+
+
+# Generate top 6 reddit post based on subreddit input
+@client.command(aliases=['reddit'])
+async def _beginner(ctx, *args):
+    response = ''
+    size = 6
+    length = len(args)
+    arg = 'random'
+    
+    if length > 0:
+        arg = args[0]
+
+    reddit = praw.Reddit(client_id=os.environ['CLIENT_ID'],
+                         client_secret=os.environ['CLIENT_SECRET'],
+                         user_agent='my user agent')
+
+    response = 'Top Ten ' + arg + ' Subrredit Posts \n--------------------------------------\n'
+
+    try:
+        for submission in reddit.subreddit(arg).hot(limit=size):
+            # print(submission.title)
+            response = response + '\n' + submission.title + '\n<' + submission.url + '>' + '\n'
+
+    except Exception as e: 
+        # print(e)   
+        response = arg + ' is not a valid subreddit!'
+
+
+    await ctx.send(f'{response}')
 
 
 @client.command()
