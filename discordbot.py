@@ -5,6 +5,7 @@ import os
 import requests
 from discord.ext import commands, tasks
 import praw
+import urllib.parse, urllib.request, re
 
 client = commands.Bot(command_prefix=commands.when_mentioned_or("!"))
 
@@ -79,7 +80,7 @@ async def _beginner(ctx, *args):
     size = 6
     length = len(args)
     arg = 'random'
-    
+
     if length > 0:
         arg = args[0]
 
@@ -94,12 +95,27 @@ async def _beginner(ctx, *args):
             # print(submission.title)
             response = response + '\n' + submission.title + '\n<' + submission.url + '>' + '\n'
 
-    except Exception as e: 
-        # print(e)   
+    except Exception as e:
+        # print(e)
         response = arg + ' is not a valid subreddit!'
 
 
     await ctx.send(f'{response}')
+
+
+# youtube search capability
+@client.command()
+async def youtube(ctx, *, search):
+    query_string = urllib.parse.urlencode({
+        'search_query': search
+    })
+
+    htm_content = urllib.request.urlopen(
+        'http://www.youtube.com/results?' + query_string
+    )
+
+    search_results = re.findall('href=\"\\/watch\\?v=(.{11})', htm_content.read().decode())
+    await ctx.send('http://www.youtube.com/watch?v=' + search_results[0])
 
 ######################## ZTM DISCORD BOT #########################
 # This project will start off simple and as we progress we can make it more complex with cogs(OOP)
