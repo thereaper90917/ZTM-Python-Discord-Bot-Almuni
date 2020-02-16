@@ -24,6 +24,7 @@ import os
 import requests
 from discord.ext import commands, tasks
 import praw
+import urllib.parse, urllib.request, re
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -108,12 +109,12 @@ async def _beginner(ctx, *args):
     size = 6
     length = len(args)
     arg = 'random'
-    
+
     if length > 0:
         arg = args[0]
 
-    reddit = praw.Reddit(client_id=os.environ['CLIENT_ID'],
-                         client_secret=os.environ['CLIENT_SECRET'],
+    reddit = praw.Reddit(client_id='WK1IOa7r6-gUGw',
+                         client_secret='ZSrUQK_FYoqkhToJetqMjtqjy-I',
                          user_agent='my user agent')
 
     response = 'Top Ten ' + arg + ' Subrredit Posts \n--------------------------------------\n'
@@ -123,12 +124,46 @@ async def _beginner(ctx, *args):
             # print(submission.title)
             response = response + '\n' + submission.title + '\n<' + submission.url + '>' + '\n'
 
-    except Exception as e: 
-        # print(e)   
+    except Exception as e:
+        # print(e)
         response = arg + ' is not a valid subreddit!'
 
 
     await ctx.send(f'{response}')
+
+
+# youtube search capability
+@client.command()
+async def youtube(ctx, *, search):
+    query_string = urllib.parse.urlencode({
+        'search_query': search
+    })
+
+    htm_content = urllib.request.urlopen(
+        'http://www.youtube.com/results?' + query_string
+    )
+
+    search_results = re.findall('href=\"\\/watch\\?v=(.{11})', htm_content.read().decode())
+    await ctx.send('http://www.youtube.com/watch?v=' + search_results[0])
+
+######################## ZTM DISCORD BOT #########################
+# This project will start off simple and as we progress we can make it more complex with cogs(OOP)
+
+# import discord.py first
+
+# first we need to get the bot to join a discord server
+# after we connect to a discord server we will print all the users that join or leave the server
+# after this we will start with basic commands
+# the first command will be a simple reply from the bot example if we do !ping it should reply "pong"
+
+
+######################## Packages we will be starting with #########################
+# Discord.py for documentation refer to  https://discordpy.readthedocs.io/en/latest/
+
+
+######################## IMPORTAN NOTICES WHEN USING DISCORD.PY #########################
+
+# Discord.py was rewritten the latest version is known as (rewrite) due to this i recommend using python 3.7 and up to avoid errors/conflicts
 
 
 @client.command()
