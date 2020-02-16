@@ -102,34 +102,59 @@ async def advanced(ctx):
     await ctx.send(f'Testing advanced')
 
 
-# Generate top 6 reddit post based on subreddit input
-@client.command(aliases=['reddit'])
-async def _beginner(ctx, *args):
-    response = ''
-    size = 6
-    length = len(args)
-    arg = 'random'
+# Generate top 10 reddit post based on subreddit input
+redditclient = praw.Reddit(client_id='WK1IOa7r6-gUGw',
+                     client_secret='ZSrUQK_FYoqkhToJetqMjtqjy-I',
+                     user_agent='my user agent')
 
-    if length > 0:
-        arg = args[0]
+@client.command(aliases=['!reddit'])
+async def reddit(ctx, arg):
+    all_subreddits_url = 'https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits'
+    reddit_icon = 'https://cdn2.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_Reddit-512.png'
+    if arg == '-help':
+        subreddit_list = ['r/coding', 'r/javascript', 'r/programming', 'r/Python', 'r/webdev', 'r/web']
 
-    reddit = praw.Reddit(client_id='WK1IOa7r6-gUGw',
-                         client_secret='ZSrUQK_FYoqkhToJetqMjtqjy-I',
-                         user_agent='my user agent')
+        embed = discord.Embed(title='List of available subreddits', 
+                            url=all_subreddits_url, 
+                            description="Shows a list of some subreddits where posts can be gotten from\
+                            and how to write the commands to get them",
+                            color=0x6b57f7)
+        embed.set_thumbnail(url=reddit_icon)
+        for sub in subreddit_list:
+            embed.add_field(name=f'**{sub}**',
+                            value=f'!reddit {sub} - Returns top 10 posts in the [{sub}](https://reddit.com/{sub}) subreddit',
+                            inline=False)
+        embed.add_field(name=f'**All**',
+                        value=f'View all available subreddits [here](https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits)\
+                        or type !reddit r/all for the top 10 posts from all subreddits combined')
+        
+        await ctx.send(embed=embed)
 
-    response = 'Top Ten ' + arg + ' Subrredit Posts \n--------------------------------------\n'
+    else:
+        try:
+            hot_posts = redditclient.subreddit(arg[2:]).hot(limit=10)
 
-    try:
-        for submission in reddit.subreddit(arg).hot(limit=size):
-            # print(submission.title)
-            response = response + '\n' + submission.title + '\n<' + submission.url + '>' + '\n'
+            embed = discord.Embed(title=f'Top posts in {arg}', 
+                                description=f"Shows the hottest posts in the [{arg}](https://reddit.com/{arg}) subreddit",
+                                color=0x00ff00)
+            embed.set_thumbnail(url=reddit_icon)
+            for post in hot_posts:
+                embed.add_field(name=f'**{post.title}**',
+                                value=f':link:[Link to post]({post.url}) \n:arrow_up: {post.score}  \
+                                :speech_left: {post.num_comments}\n',
+                                inline=False)
 
-    except Exception as e:
-        # print(e)
-        response = arg + ' is not a valid subreddit!'
+            await ctx.send(embed=embed)
 
+        except Exception as e:
+            await ctx.send(f'Sorry, {arg} is not a valid subreddit!\
+                            \n\nEnter a valid subreddit name or type **!reddit -help** to get a list of valid subreddits')
 
-    await ctx.send(f'{response}')
+@reddit.error
+async def reddit_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send('Please enter the name of the subreddit after the **!reddit** command\
+                        \n\nType **!reddit -help** for more info on the command')
 
 
 # youtube search capability
@@ -145,25 +170,6 @@ async def youtube(ctx, *, search):
 
     search_results = re.findall('href=\"\\/watch\\?v=(.{11})', htm_content.read().decode())
     await ctx.send('http://www.youtube.com/watch?v=' + search_results[0])
-
-######################## ZTM DISCORD BOT #########################
-# This project will start off simple and as we progress we can make it more complex with cogs(OOP)
-
-# import discord.py first
-
-# first we need to get the bot to join a discord server
-# after we connect to a discord server we will print all the users that join or leave the server
-# after this we will start with basic commands
-# the first command will be a simple reply from the bot example if we do !ping it should reply "pong"
-
-
-######################## Packages we will be starting with #########################
-# Discord.py for documentation refer to  https://discordpy.readthedocs.io/en/latest/
-
-
-######################## IMPORTAN NOTICES WHEN USING DISCORD.PY #########################
-
-# Discord.py was rewritten the latest version is known as (rewrite) due to this i recommend using python 3.7 and up to avoid errors/conflicts
 
 
 @client.command()
