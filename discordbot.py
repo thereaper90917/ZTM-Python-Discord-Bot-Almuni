@@ -102,30 +102,24 @@ async def advanced(ctx):
     await ctx.send(f'Testing advanced')
 
 
-# Generate top 6 reddit post based on subreddit input
+# Generate top 10 reddit post based on subreddit input
+redditclient = praw.Reddit(client_id='WK1IOa7r6-gUGw',
+                     client_secret='ZSrUQK_FYoqkhToJetqMjtqjy-I',
+                     user_agent='my user agent')
+
 @client.command(aliases=['reddit'])
-async def _beginner(ctx, *args):
+async def _beginner(ctx, arg):
     response = ''
-    size = 6
-    length = len(args)
     arg = 'random'
 
-    if length > 0:
-        arg = args[0]
-
-    reddit = praw.Reddit(client_id='WK1IOa7r6-gUGw',
-                         client_secret='ZSrUQK_FYoqkhToJetqMjtqjy-I',
-                         user_agent='my user agent')
-
+    hot_posts = redditclient.subreddit(arg).hot(limit=10)
     response = 'Top Ten ' + arg + ' Subrredit Posts \n--------------------------------------\n'
 
     try:
-        for submission in reddit.subreddit(arg).hot(limit=size):
-            # print(submission.title)
-            response = response + '\n' + submission.title + '\n<' + submission.url + '>' + '\n'
+        for post in hot_posts:
+            response = response + '\n' + post.title + '\n<' + post.url + '>' + '\n'
 
     except Exception as e:
-        # print(e)
         response = arg + ' is not a valid subreddit!'
 
 
