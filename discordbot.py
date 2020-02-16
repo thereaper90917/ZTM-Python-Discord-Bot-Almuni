@@ -107,23 +107,54 @@ redditclient = praw.Reddit(client_id='WK1IOa7r6-gUGw',
                      client_secret='ZSrUQK_FYoqkhToJetqMjtqjy-I',
                      user_agent='my user agent')
 
-@client.command(aliases=['reddit'])
-async def _beginner(ctx, arg):
-    response = ''
-    arg = 'random'
+@client.command(aliases=['!reddit'])
+async def reddit(ctx, arg):
+    all_subreddits_url = 'https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits'
+    reddit_icon = 'https://cdn2.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_Reddit-512.png'
+    if arg == '-help':
+        subreddit_list = ['r/coding', 'r/javascript', 'r/programming', 'r/Python', 'r/webdev', 'r/web']
 
-    hot_posts = redditclient.subreddit(arg).hot(limit=10)
-    response = 'Top Ten ' + arg + ' Subrredit Posts \n--------------------------------------\n'
+        embed = discord.Embed(title='List of available subreddits', 
+                            url=all_subreddits_url, 
+                            description="Shows a list of some subreddits where posts can be gotten from\
+                            and how to write the commands to get them",
+                            color=0x6b57f7)
+        embed.set_thumbnail(url=reddit_icon)
+        for sub in subreddit_list:
+            embed.add_field(name=f'**{sub}**',
+                            value=f'!reddit {sub} - Returns top 10 posts in the [{sub}](https://reddit.com/{sub}) subreddit',
+                            inline=False)
+        embed.add_field(name=f'**All**',
+                        value=f'View all available subreddits [here](https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits)\
+                        or type !reddit r/all for the top 10 posts from all subreddits combined')
+        
+        await ctx.send(embed=embed)
 
-    try:
-        for post in hot_posts:
-            response = response + '\n' + post.title + '\n<' + post.url + '>' + '\n'
+    else:
+        try:
+            hot_posts = redditclient.subreddit(arg[2:]).hot(limit=10)
 
-    except Exception as e:
-        response = arg + ' is not a valid subreddit!'
+            embed = discord.Embed(title=f'Top posts in {arg}', 
+                                description=f"Shows the hottest posts in the [{arg}](https://reddit.com/{arg}) subreddit",
+                                color=0x00ff00)
+            embed.set_thumbnail(url=reddit_icon)
+            for post in hot_posts:
+                embed.add_field(name=f'**{post.title}**',
+                                value=f':link:[Link to post]({post.url}) \n:arrow_up: {post.score}  \
+                                :speech_left: {post.num_comments}\n',
+                                inline=False)
 
+            await ctx.send(embed=embed)
 
-    await ctx.send(f'{response}')
+        except Exception as e:
+            await ctx.send(f'Sorry, {arg} is not a valid subreddit!\
+                            \n\nEnter a valid subreddit name or type **!reddit -help** to get a list of valid subreddits')
+
+@reddit.error
+async def reddit_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send('Please enter the name of the subreddit after the **!reddit** command\
+                        \n\nType **!reddit -help** for more info on the command')
 
 
 # youtube search capability
