@@ -84,8 +84,8 @@ async def _beginner(ctx, *args):
     if length > 0:
         arg = args[0]
 
-    reddit = praw.Reddit(client_id=os.environ['CLIENT_ID'],
-                         client_secret=os.environ['CLIENT_SECRET'],
+    reddit = praw.Reddit(client_id='WK1IOa7r6-gUGw',
+                         client_secret='ZSrUQK_FYoqkhToJetqMjtqjy-I',
                          user_agent='my user agent')
 
     response = 'Top Ten ' + arg + ' Subrredit Posts \n--------------------------------------\n'
