@@ -64,9 +64,9 @@ class ToDo(commands.Cog):
 
         if ctx.args[1] == 'add':
             search = ctx.message.content.replace('!todo add', '')
-            add_data = self.db.Database("need", search, ctx.author.name, '')
+            add_data = Database("need", search, ctx.author.name, '')
             print(ctx.author.name)
-            self.db.insert_emp(add_data)
+            self.insert_emp(add_data)
             embed = discord.Embed(
                 colour=discord.Colour.dark_grey(),
                 title="Added the following feature to be done",
@@ -78,14 +78,14 @@ class ToDo(commands.Cog):
             embed = discord.Embed(
                 colour=discord.Colour.dark_grey(),
                 title="Bot Stuff Needed to be Done",
-                description=f'{self.db.view_data()}'
+                description=f'{self.view_data()}'
             )
             await ctx.channel.send(embed=embed)
 
         elif ctx.args[1] == 'remove':
             input_del = ctx.message.content.replace('!todo remove', '')
-            delete_data = self.db.Database("need", input_del, '', '')
-            self.db.remove_emp(delete_data)
+            delete_data = Database("need", input_del, '', '')
+            self.remove_emp(delete_data)
             embed = discord.Embed(
                 colour=discord.Colour.dark_grey(),
                 title="Deleted the Following",
@@ -95,8 +95,8 @@ class ToDo(commands.Cog):
 
         elif ctx.args[1] == 'update':
             input_data = ctx.message.content.replace('!todo update', '')
-            update_data = self.db.Database('need', input_data, '', ctx.author)
-            self.db.update_complete(update_data, ctx.author.name)
+            update_data = Database('need', input_data, '', ctx.author)
+            self.update_complete(update_data, ctx.author.name)
 
 
 def setup(bot):
