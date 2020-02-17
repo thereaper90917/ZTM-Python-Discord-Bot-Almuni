@@ -44,10 +44,6 @@ async def on_ready():
 
     print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
 
-    # Changes our bots Playing Status. type=1(streaming) for a standard game you could remove type and url.
-    await bot.change_presence(activity=discord.Game(name='The Witcher 3'))
-    print(f'Successfully logged in and booted...!')
-
 
 # member has joined server
 @bot.event
