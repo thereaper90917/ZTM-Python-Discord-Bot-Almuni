@@ -140,8 +140,7 @@ async def reddit(ctx, arg):
             embed.set_thumbnail(url=reddit_icon)
             for post in hot_posts:
                 embed.add_field(name=f'**{post.title}**',
-                                value=f':link:[Link to post]({post.url}) \n:arrow_up: {post.score}  \
-                                :speech_left: {post.num_comments}\n',
+                                value=f':link:[Link to post]({post.url}) \n:arrow_up: {post.score}  :speech_left: {post.num_comments}',
                                 inline=False)
 
             await ctx.send(embed=embed)
