@@ -3,6 +3,7 @@ import os
 import logging
 from discord.ext import commands
 
+global logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='./discordbot.log', encoding='utf-8', mode='w')
