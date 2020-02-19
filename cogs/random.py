@@ -33,7 +33,7 @@ class Random(commands.Cog):
     @commands.command(name='ping')
     async def ping(self, ctx):
         """ Ping times from a bot? """
-        await ctx.send(f'Pong! {round(client.latency * 1000)}.ms')
+        await ctx.send(f'Pong! {round(self.bot.latency * 1000)}.ms')
 
 
 def setup(bot):
