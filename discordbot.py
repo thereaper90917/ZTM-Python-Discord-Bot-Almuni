@@ -3,10 +3,13 @@ import os
 import logging
 from discord.ext import commands
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='./discordbot.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+global logger
+logger = logging.getLogger('discord')
+if logger.level == 0:               # Prevents the logger from being loaded again in case of module reload
+    logger.setLevel(logging.INFO)   # Change this to get DEBUG info if necessary
+    handler = logging.FileHandler(filename='logs/discordbot.log', encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
 
 
 def get_prefix(bot, message):
@@ -36,15 +39,18 @@ bot = commands.Bot(command_prefix=get_prefix, description='ZTM Python Discord Bo
 # Loading cogs
 if __name__ == '__main__':
     for extension in initial_extensions:
+        logger.info(f'Loading extension: {extension}')
         bot.load_extension(extension)
 
 
 @bot.event
 async def on_ready():
     # Changes our bots Playing Status. type=1(streaming) for a standard game you could remove type and url.
+    logger.info('Starting bot...')
     await bot.change_presence(activity=discord.Game(name='The Witcher 3'))
     print(f'Successfully logged in and booted...!')
     print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
+    logger.info('Bot started.')
 
 
 # member has joined server
