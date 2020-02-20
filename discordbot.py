@@ -5,7 +5,7 @@ from discord.ext import commands
 
 logger = logging.getLogger('discord')
 if logger.level == 0:               # Prevents the logger from being loaded again in case of module reload
-    logger.setLevel(logging.INFO)   # Change this to get DEBUG info if necessary
+    logger.setLevel(logging.DEBUG)   # Change this to get DEBUG info if necessary
     handler = logging.FileHandler(filename='logs/discordbot.log', encoding='utf-8', mode='w')
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
@@ -31,7 +31,8 @@ initial_extensions = ['cogs.random',
                       'cogs.reddit',
                       'cogs.youtube',
                       'cogs.todo',
-                      'cogs.challenges']
+                      'cogs.challenges',
+                      'cogs.reminder']
 
 bot = commands.Bot(command_prefix=get_prefix, description='ZTM Python Discord Bot')
 
