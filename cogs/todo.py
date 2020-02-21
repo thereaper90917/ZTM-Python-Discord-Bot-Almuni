@@ -1,22 +1,22 @@
 import sqlite3
 import discord
 from discord.ext import commands
+
 import praw
 
 
 class Database:
-    
-
     def __init__(self, need, command, complete, completed, working):
         self.need = need
         self.command = command
         self.complete = complete
         self.completed = completed
         self.working = working
-
+        
     @property
     def user_one(self):
         return '{} {}'.format(self.need, self.command)
+
 
 
 class Test(commands.Cog):
@@ -36,7 +36,6 @@ class Test(commands.Cog):
         with self.conn:
             self.c.execute("DELETE from needs WHERE need= :need AND command = :command",
                            {'need': emp.need, 'command': emp.command})
-            
 
     def update_complete(self, emp, completed):
         with self.conn:

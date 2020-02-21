@@ -1,14 +1,14 @@
 import discord
 import os
 import logging
-import sqlite3
 from discord.ext import commands
-import praw
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='./discordbot.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger = logging.getLogger('discord')
+if logger.level == 0:               # Prevents the logger from being loaded again in case of module reload
+    logger.setLevel(logging.INFO)   # Change this to get DEBUG info if necessary
+    handler = logging.FileHandler(filename='logs/discordbot.log', encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
 
 
 def get_prefix(bot, message):
@@ -31,19 +31,24 @@ initial_extensions = ['cogs.random',
                       'cogs.reddit',
                       'cogs.youtube',
                       'cogs.todo',
-                      'cogs.challenges']
+                      'cogs.challenges',
+                      'cogs.reminder']
 
+logger.info('Starting bot...')
 bot = commands.Bot(command_prefix=get_prefix, description='ZTM Python Discord Bot')
 
 # Loading cogs
 if __name__ == '__main__':
     for extension in initial_extensions:
+        logger.info(f'Loading extension: {extension}')
         bot.load_extension(extension)
 
 
 @bot.event
 async def on_ready():
-
+    # Changes our bots Playing Status. type=1(streaming) for a standard game you could remove type and url.
+    await bot.change_presence(activity=discord.Game(name='The Witcher 3'))
+    print(f'Successfully logged in and booted...!')
     print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
 
 
@@ -58,14 +63,11 @@ async def on_member_join(member):
 async def on_member_remove(member):
     print(f'{member} has left the server')
 
-
-
-
-
 # Generate top 10 reddit post based on subreddit input
 redditclient = praw.Reddit(client_id='Client ID here',
                      client_secret='Secret Client here',
                      user_agent='my user agent')
+
 
 @bot.command(aliases=['!reddit'])
 async def reddit(ctx, arg):
@@ -109,6 +111,7 @@ async def reddit(ctx, arg):
             await ctx.send(f'Sorry, {arg} is not a valid subreddit!\
                             \n\nEnter a valid subreddit name or type **!reddit -help** to get a list of valid subreddits')
 
+
 @reddit.error
 async def reddit_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
@@ -120,4 +123,4 @@ async def reddit_error(ctx, error):
 async def gn(ctx):
     exit()
 
-bot.run("Token Here", bot=True, reconnect=True)
+bot.run(os.environ['DISCORD_TOKEN'], bot=True, reconnect=True)

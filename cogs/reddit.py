@@ -11,7 +11,7 @@ class Reddit(commands.Cog):
         self.login = praw.Reddit(client_id='WK1IOa7r6-gUGw',
                                  client_secret='ZSrUQK_FYoqkhToJetqMjtqjy-I',
                                  user_agent='my user agent')
-                                 
+                        
         
     @commands.command(name='testing2315')
     async def do_reddit(self, ctx, *args):
@@ -50,7 +50,6 @@ class Reddit(commands.Cog):
             except Exception as e:
                         await ctx.send(f'Sorry, {args} is not a valid subreddit!\
                             \n\nEnter a valid subreddit name or type **!reddit -help** to get a list of valid subreddits')
-    
 
 
 def setup(bot):
