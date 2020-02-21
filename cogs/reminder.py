@@ -110,7 +110,7 @@ class Reminder(commands.Cog):
 
     async def do_reminder(self):
         await self.bot.wait_until_ready()
-        while self is self.bot.get_cog("Reminder"):
+        while not self.bot.is_closed():
             to_remove = []
             if len(self.reminders) > 0:
                 for reminder in self.reminders:
