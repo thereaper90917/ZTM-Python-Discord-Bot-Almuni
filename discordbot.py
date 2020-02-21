@@ -3,7 +3,6 @@ import os
 import logging
 from discord.ext import commands
 
-global logger
 logger = logging.getLogger('discord')
 if logger.level == 0:               # Prevents the logger from being loaded again in case of module reload
     logger.setLevel(logging.INFO)   # Change this to get DEBUG info if necessary
@@ -32,7 +31,8 @@ initial_extensions = ['cogs.random',
                       'cogs.reddit',
                       'cogs.youtube',
                       'cogs.todo',
-                      'cogs.challenges']
+                      'cogs.challenges',
+                      'cogs.reminder']
 
 bot = commands.Bot(command_prefix=get_prefix, description='ZTM Python Discord Bot')
 
@@ -49,7 +49,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name='The Witcher 3'))
     print(f'Successfully logged in and booted...!')
     print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
-    logger.info('Bot started.')
+    logger.info('Bot Started')
 
 # member has joined server
 @bot.event
