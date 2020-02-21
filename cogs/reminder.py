@@ -69,7 +69,6 @@ class Reminder(commands.Cog):
         else:
             await ctx.send("Something went wrong.")
 
-
     @reminder.error
     async def reminder_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
