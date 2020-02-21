@@ -1,7 +1,6 @@
 import discord
 import os
 import logging
-import praw
 from discord.ext import commands
 
 logger = logging.getLogger('discord')
@@ -62,61 +61,6 @@ async def on_member_join(member):
 @bot.event
 async def on_member_remove(member):
     print(f'{member} has left the server')
-
-# Generate top 10 reddit post based on subreddit input
-redditclient = praw.Reddit(client_id='Client ID here',
-                     client_secret='Secret Client here',
-                     user_agent='my user agent')
-
-
-@bot.command(aliases=['!reddit'])
-async def reddit(ctx, arg):
-    all_subreddits_url = 'https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits'
-    reddit_icon = 'https://cdn2.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_Reddit-512.png'
-    if arg == '-help':
-        subreddit_list = ['r/coding', 'r/javascript', 'r/programming', 'r/Python', 'r/webdev', 'r/web']
-
-        embed = discord.Embed(title='List of available subreddits', 
-                            url=all_subreddits_url, 
-                            description="Shows a list of some subreddits where posts can be gotten from\
-                            and how to write the commands to get them",
-                            color=0x6b57f7)
-        embed.set_thumbnail(url=reddit_icon)
-        for sub in subreddit_list:
-            embed.add_field(name=f'**{sub}**',
-                            value=f'!reddit {sub} - Returns top 10 posts in the [{sub}](https://reddit.com/{sub}) subreddit',
-                            inline=False)
-        embed.add_field(name=f'**All**',
-                        value=f'View all available subreddits [here](https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits)\
-                        or type !reddit r/all for the top 10 posts from all subreddits combined')
-        
-        await ctx.send(embed=embed)
-
-    else:
-        try:
-            hot_posts = redditclient.subreddit(arg[2:]).hot(limit=10)
-
-            embed = discord.Embed(title=f'Top posts in {arg}', 
-                                description=f"Shows the hottest posts in the [{arg}](https://reddit.com/{arg}) subreddit",
-                                color=0x00ff00)
-            embed.set_thumbnail(url=reddit_icon)
-            for post in hot_posts:
-                embed.add_field(name=f'**{post.title}**',
-                                value=f':link:[Link to post]({post.url}) \n:arrow_up: {post.score}  :speech_left: {post.num_comments}',
-                                inline=False)
-
-            await ctx.send(embed=embed)
-
-        except Exception as e:
-            await ctx.send(f'Sorry, {arg} is not a valid subreddit!\
-                            \n\nEnter a valid subreddit name or type **!reddit -help** to get a list of valid subreddits')
-
-
-@reddit.error
-async def reddit_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send('Please enter the name of the subreddit after the **!reddit** command\
-                        \n\nType **!reddit -help** for more info on the command')
 
 
 @bot.command()
