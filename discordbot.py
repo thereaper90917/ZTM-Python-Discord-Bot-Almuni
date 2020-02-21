@@ -43,13 +43,14 @@ if __name__ == '__main__':
         logger.info(f'Loading extension: {extension}')
         bot.load_extension(extension)
 
+
 @bot.event
 async def on_ready():
     # Changes our bots Playing Status. type=1(streaming) for a standard game you could remove type and url.
     await bot.change_presence(activity=discord.Game(name='The Witcher 3'))
     print(f'Successfully logged in and booted...!')
     print(f'\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
-    logger.info('Bot Started')
+
 
 # member has joined server
 @bot.event
@@ -66,6 +67,7 @@ async def on_member_remove(member):
 redditclient = praw.Reddit(client_id='Client ID here',
                      client_secret='Secret Client here',
                      user_agent='my user agent')
+
 
 @bot.command(aliases=['!reddit'])
 async def reddit(ctx, arg):
@@ -108,6 +110,7 @@ async def reddit(ctx, arg):
         except Exception as e:
             await ctx.send(f'Sorry, {arg} is not a valid subreddit!\
                             \n\nEnter a valid subreddit name or type **!reddit -help** to get a list of valid subreddits')
+
 
 @reddit.error
 async def reddit_error(ctx, error):
