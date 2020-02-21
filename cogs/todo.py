@@ -18,7 +18,6 @@ class Database:
         return '{} {}'.format(self.need, self.command)
 
 
-
 class Test(commands.Cog):
     """ Cog to add items to a To-do list (broken right now) """
     def __init__(self, bot):
@@ -42,7 +41,6 @@ class Test(commands.Cog):
             self.c.execute("""UPDATE needs SET completed = :completed
                          WHERE need = :need AND command = :command""",
                            {'need': emp.need, 'command': emp.command, 'completed': completed})
-
 
     def update_done(self, emp, done):
         with self.conn:
