@@ -5,21 +5,38 @@ import time
 import logging
 from tinydb import TinyDB
 
+logger = logging.getLogger("reminders")
+
 
 class Reminder(commands.Cog):
-    """Never forget anything anymore."""
+    """ Set a Reminder for text in given amount of time """
 
-    def __init__(self, bot):
+    def __init__(self, bot, loop=asyncio):
         self.bot = bot
         self.reminders = TinyDB('data/reminders.db')
         self.units = {"minute": 60, "hour": 3600, "day": 86400, "week": 604800, "month": 2592000}
+        self.loop = asyncio.get_event_loop()
+        self.bg_task = self.loop.create_task(self.do_reminder())
 
-    @commands.command(pass_context=True)
+    def add_db(self, data):
+        # TODO: Fix this...
+        try:
+            self.reminders.insert(data)
+            return True
+        except Exception as e:
+            return False
+
+    def rm_db(self, rec):
+        # TODO: Encapsulate db code in to rm_db()
+        pass
+
+    def view_db(self, user_id):
+        # TODO: Encapsulate viewing of db records in to view_db()
+        pass
+
+    @commands.command(pass_context=True, aliases=['reminders', 'set_reminder', 'add_reminder'])
     async def reminder(self, ctx, quantity: int, time_unit: str, *, text: str):
-        """Sends you <text> when the time is up
-        Accepts: minutes, hours, days, weeks, month
-        Example:
-        [p]reminder 3 days Have sushi with Asu and JennJenn"""
+        """Set a reminder - Usage: !reminder <int> <minutes/hours/days/weeks/months> <reminder message"""
         time_unit = time_unit.lower()
         author = ctx.message.author
         s = ""
@@ -41,13 +58,15 @@ class Reminder(commands.Cog):
                 "remind_at": future,
                 "time": str(quantity) + ' ' + time_unit,
                 "message": text}
-        self.reminders.insert(data)
-        logger.info("{} ({}) set a reminder.".format(author.name, author.id))
-        await ctx.send(f"I will remind you of that in {str(quantity)} {time_unit}s.")
+        if self.add_db(data):
+            logger.info(f"{author.name} ({author.id}) set a reminder.")
+            await ctx.send(f"I will remind you of that in {str(quantity)} {time_unit}s.")
+        else:
+            await ctx.send("Something went wrong.")
 
     @commands.command(pass_context=True)
     async def clear_reminders(self, ctx):
-        """Removes all your upcoming notifications"""
+        """Removes all your upcoming reminders"""
         author = ctx.message.author
         to_remove = []
         for reminder in self.reminders:
@@ -57,13 +76,14 @@ class Reminder(commands.Cog):
         if not to_remove == []:
             for reminder in to_remove:
                 self.reminders.remove(doc_ids=[reminder.doc_id])
-            await ctx.send("All your notifications have been removed.")
+            await ctx.send("Your reminders have been cleared")
             logger.info(f"{author.name} ({author.id}) cleared all reminders.")
         else:
-            await ctx.send("You don't have any upcoming notification.")
+            await ctx.send("You don't have any reminders.")
 
     @commands.command(pass_context=True)
     async def view_reminders(self, ctx):
+        """View all your upcoming reminders"""
         author = ctx.message.author
         id_list = []
         time_list = []
@@ -88,25 +108,33 @@ class Reminder(commands.Cog):
                         inline=True)
         await ctx.send(embed=embed)
 
-    async def check_reminders(self):
+    async def do_reminder(self):
+        await self.bot.wait_until_ready()
         while self is self.bot.get_cog("Reminder"):
             to_remove = []
-            for reminder in self.reminders:
-                if reminder["remind_at"] <= int(time.time()):
-                    user = self.bot.fetch_user(int(reminder['id']))
-                    print(user.name)
-        await asyncio.sleep(5)
+            if len(self.reminders) > 0:
+                for reminder in self.reminders:
+                    if reminder["remind_at"] <= int(time.time()):
+                        user = await self.bot.fetch_user(int(reminder['id']))
+                        dm_channel = user.dm_channel
+                        if not dm_channel:
+                            dm_channel = await user.create_dm()
+                            print(dm_channel)
+                        await dm_channel.send(f"You asked me to remind you with this message:\n{reminder['message']}")
+                        to_remove.append(reminder.doc_id)
+                        logger.info(f"{user.name} ({user.id}) reminder sent at {time.time()}.")
+
+                self.reminders.remove(doc_ids=to_remove)
+            else:
+                return
+
+            await asyncio.sleep(5)
 
 
 def setup(bot):
-    global logger
-    logger = logging.getLogger("reminders")
     if logger.level == 0:  # Prevents the logger from being loaded again in case of module reload
         logger.setLevel(logging.DEBUG)
         handler = logging.FileHandler(filename='logs/reminders.log', encoding='utf-8', mode='a')
         handler.setFormatter(logging.Formatter('%(asctime)s %(message)s', datefmt="[%d/%m/%Y %H:%M]"))
         logger.addHandler(handler)
-    b = Reminder(bot)
-    loop = asyncio.get_event_loop()
-    loop.create_task(b.check_reminders())
-    bot.add_cog(b)
+    bot.add_cog(Reminder(bot))
