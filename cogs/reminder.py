@@ -14,7 +14,11 @@ class Reminder(commands.Cog):
     def __init__(self, bot, loop=asyncio):
         self.bot = bot
         self.reminders = TinyDB('data/reminders.db')
-        self.units = {"minute": 60, "hour": 3600, "day": 86400, "week": 604800, "month": 2592000}
+        self.units = {"m": 60,
+                      "h": 3600,
+                      "d": 86400,
+                      "w": 604800}
+        self.times = ['minute', 'hour', 'day', 'week']
         self.loop = asyncio.get_event_loop()
         self.bg_task = self.loop.create_task(self.do_reminder())
 
@@ -36,46 +40,54 @@ class Reminder(commands.Cog):
 
     @commands.command(pass_context=True, aliases=['reminders', 'set_reminder', 'add_reminder'])
     async def reminder(self, ctx, quantity: int, time_unit: str, *, text: str):
-        """Set a reminder - Usage: !reminder <int> <minutes/hours/days/weeks/months> <reminder message"""
-        time_unit = time_unit.lower()
+        """Set a reminder - Usage: !reminder <int> <minutes/hours/days/weeks> <reminder message"""
+        time_prefix = time_unit.lower()[:1]
         author = ctx.message.author
-        s = ""
+        s = ''
+
         if time_unit.endswith("s"):
             time_unit = time_unit[:-1]
             s = "s"
-        if time_unit not in self.units:
+        if time_unit not in self.times:
             await ctx.send("Invalid time unit. Choose minutes/hours/days/weeks/month")
             return
-        if quantity < 1:
+        if not quantity or quantity < 1:
             await ctx.send("Quantity must not be 0 or negative.")
             return
         if len(text) > 1960:
             await ctx.send("Text is too long.")
             return
-        seconds = self.units[time_unit] * quantity
+        seconds = self.units[time_prefix] * quantity
         future = int(time.time() + seconds)
         data = {"id": author.id,
                 "remind_at": future,
                 "time": str(quantity) + ' ' + time_unit,
                 "message": text}
-        if self.add_db(data):
+        if self.reminders.insert(data):
             logger.info(f"{author.name} ({author.id}) set a reminder.")
-            await ctx.send(f"I will remind you of that in {str(quantity)} {time_unit}s.")
+            await ctx.send(f"I will remind you of that in {str(quantity)} {time_unit}{s}.")
         else:
             await ctx.send("Something went wrong.")
+
+
+    @reminder.error
+    async def reminder_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("You must supply the correct arguments")
+            logger.error(f'An error occurred: {error}')
 
     @commands.command(pass_context=True)
     async def clear_reminders(self, ctx):
         """Removes all your upcoming reminders"""
         author = ctx.message.author
-        to_remove = []
+        removable = []
         for reminder in self.reminders:
             if reminder["id"] == author.id:
-                to_remove.append(reminder)
+                removable.append(reminder)
 
-        if not to_remove == []:
-            for reminder in to_remove:
-                self.reminders.remove(doc_ids=[reminder.doc_id])
+        if not removable == []:
+            for item in removable:
+                self.reminders.remove(doc_ids=[item.doc_id])
             await ctx.send("Your reminders have been cleared")
             logger.info(f"{author.name} ({author.id}) cleared all reminders.")
         else:
@@ -89,24 +101,27 @@ class Reminder(commands.Cog):
         time_list = []
         msg_list = []
 
-        for reminder in self.reminders:
-            if reminder['id'] == author.id:
-                id_list.append(str(reminder.doc_id))
-                time_list.append(reminder['time'])
-                msg_list.append(reminder['message'])
-            else:
-                return
-        embed = discord.Embed(colour=discord.Colour.dark_grey(), title="Reminders")
-        embed.add_field(name='ID',
-                        value=str(id_list).replace(',', '\n').replace('[', '').replace(']', '').replace('\'', ''),
-                        inline=True)
-        embed.add_field(name='Time',
-                        value=str(time_list).replace(',', '\n').replace('[', '').replace(']', '').replace('\'', '') + 's',
-                        inline=True)
-        embed.add_field(name='Reminder',
-                        value=str(msg_list).replace(',', '\n').replace('[', '').replace(']', '').replace('\'', ''),
-                        inline=True)
-        await ctx.send(embed=embed)
+        if len(self.reminders) > 0:
+            for reminder in self.reminders:
+                if reminder['id'] == author.id:
+                    id_list.append(str(reminder.doc_id))
+                    time_list.append(reminder['time'])
+                    msg_list.append(reminder['message'])
+                else:
+                    return
+            embed = discord.Embed(colour=discord.Colour.dark_grey(), title="Reminders")
+            embed.add_field(name='#',
+                            value=str(id_list).replace(',', '\n').replace('[', '').replace(']', '').replace('\'', ''),
+                            inline=True)
+            embed.add_field(name='Time',
+                            value=str(time_list).replace(',', '\n').replace('[', '').replace(']', '').replace('\'', '') + 's',
+                            inline=True)
+            embed.add_field(name='Reminder',
+                            value=str(msg_list).replace(',', '\n').replace('[', '').replace(']', '').replace('\'', ''),
+                            inline=True)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("Reminder database is empty")
 
     async def do_reminder(self):
         await self.bot.wait_until_ready()

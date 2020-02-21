@@ -1,6 +1,7 @@
 import discord
 import os
 import logging
+import praw
 from discord.ext import commands
 
 logger = logging.getLogger('discord')
