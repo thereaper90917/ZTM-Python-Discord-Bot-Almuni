@@ -1,9 +1,7 @@
 tinydb
-
 discord
 discord.py
 requests
 beautifulsoup4
 #sqlite3 #is installed by default within python
-database_user
 praw
