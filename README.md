@@ -13,6 +13,9 @@
 * Moderators will have the ability to scrape the web for discovering new programming projects. Each project will be ranked and then properly categorized. Beginner, Intermediate and Advanced projects will be stored as lists and accessed per user. As the user completes the projects, they will receive a score and the project will be removed from the list for that user only.
 
 * Requirements:
+	* tinydb v3.15.2
+	* discord v1.0.1
+	* praw v6.5.1
     * python v3.7
     * discord.py v1.2.5
     * requests v2.22.0

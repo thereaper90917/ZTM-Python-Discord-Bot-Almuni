@@ -2,8 +2,9 @@ import discord
 from discord.ext import commands
 import praw
 import logging
+import os
 
-global logger
+logger = logging.getLogger('reddit')
 
 
 class Reddit(commands.Cog):
@@ -11,12 +12,13 @@ class Reddit(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.login = praw.Reddit(client_id='Client ID here',
-                                 client_secret='Secret Client here',
-                                 user_agent='my user agent')
+        self.login = praw.Reddit(client_id=os.environ['REDDIT_ID'],
+                                 client_secret=os.environ['REDDIT_SECRET'],
+                                 user_agent=os.environ['REDDIT_UA'])
 
     @commands.command(name='reddit')
-    async def do_reddit(self, ctx, *args):
+    async def do_reddit(self, ctx, args):
+        author = ctx.message.author
         all_subreddits_url = 'https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits'
         reddit_icon = 'https://cdn2.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_Reddit-512.png'
         if args == '-help':
@@ -49,7 +51,7 @@ class Reddit(commands.Cog):
                                     inline=False)
 
                 await ctx.send(embed=embed)
-                logger.info(f'{} ({}) requested info {args}')
+                logger.info(f'{author.name} ({author.id}) requested info {args}')
             except Exception as e:
                 logger.error(f'An error occurred, Args= {args}, Error= {e}')
                 await ctx.send(f'Sorry, {args} is not a valid subreddit!\
