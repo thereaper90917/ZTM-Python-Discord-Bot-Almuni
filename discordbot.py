@@ -1,7 +1,9 @@
 import discord
-import os
 import logging
 from discord.ext import commands
+import utils
+
+CONFIG_FILE = 'discordbot.config'
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)   # Change this to get DEBUG info if necessary
@@ -10,35 +12,16 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 
 
-def get_prefix(bot, message):
-    """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
+config = utils.read_config()
+logger.info(f'Reading Configuration file: {config}')
 
-    # Add prefixes that you want the bot to respond to
-    prefixes = ['?', '!']
-
-    # Check to see if we are outside of a guild. e.g DM's etc.
-    if not message.guild:
-        # Only allow ? to be used in DMs
-        return '?'
-
-    # If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
-    return commands.when_mentioned_or(*prefixes)(bot, message)
-
-
-# Cogs need to be located in cogs folder and added here to load on startup
-initial_extensions = ['cogs.random',
-                      'cogs.reddit',
-                      'cogs.youtube',
-                      'cogs.todo',
-                      'cogs.challenges',
-                      'cogs.reminder']
 
 logger.info('Starting bot...')
-bot = commands.Bot(command_prefix=get_prefix, description='ZTM Python Discord Bot')
+bot = commands.Bot(command_prefix=utils.get_prefix, description=config['description'])
 
 # Loading cogs
 if __name__ == '__main__':
-    for extension in initial_extensions:
+    for extension in config['modules']:
         logger.info(f'Loading extension: {extension}')
         bot.load_extension(extension)
 
@@ -67,4 +50,4 @@ async def on_member_remove(member):
 async def gn(ctx):
     exit()
 
-bot.run(os.environ['DISCORD_TOKEN'], bot=True, reconnect=True)
+bot.run(config['token'], bot=True, reconnect=True)
