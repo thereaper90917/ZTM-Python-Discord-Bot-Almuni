@@ -25,7 +25,6 @@ def read_config(blob=None):
         config = json.load(config_json)
     config_json.close()
 
-    if not blob:
-        return config
-    else:
+    if blob:
         return config[blob]
+    return config
