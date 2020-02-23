@@ -3,6 +3,8 @@ from discord.ext import commands
 import praw
 import logging
 import os
+import utils
+
 
 logger = logging.getLogger('reddit')
 
@@ -12,9 +14,10 @@ class Reddit(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.login = praw.Reddit(client_id=os.environ['REDDIT_ID'],
-                                 client_secret=os.environ['REDDIT_SECRET'],
-                                 user_agent=os.environ['REDDIT_UA'])
+        self.config = utils.read_config('reddit_config')
+        self.login = praw.Reddit(client_id=self.config['reddit_token'],
+                                 client_secret=self.config['reddit_secret'],
+                                 user_agent=self.config['reddit_ua'])
 
     @commands.command(name='reddit')
     async def do_reddit(self, ctx, args):
