@@ -69,13 +69,11 @@ class Reminder(commands.Cog):
         else:
             await ctx.send("Something went wrong.")
 
-        await self.do_reminder()
-
     @reminder.error
     async def reminder_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("You must supply the correct arguments")
-            logger.error(f'An error occurred: {error}')
+            logger.error(f'An error occurred: {error} - {ctx.message.author}')
 
     @commands.command(pass_context=True)
     async def clear_reminders(self, ctx):
@@ -141,8 +139,7 @@ class Reminder(commands.Cog):
                         logger.info(f"{user.name} ({user.id}) reminder sent at {time.time()}.")
 
                 self.reminders.remove(doc_ids=to_remove)
-            else:
-                return
+
             await asyncio.sleep(5)
 
 
