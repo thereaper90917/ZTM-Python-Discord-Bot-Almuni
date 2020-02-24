@@ -69,6 +69,8 @@ class Reminder(commands.Cog):
         else:
             await ctx.send("Something went wrong.")
 
+        await self.do_reminder()
+
     @reminder.error
     async def reminder_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
@@ -141,7 +143,6 @@ class Reminder(commands.Cog):
                 self.reminders.remove(doc_ids=to_remove)
             else:
                 return
-
             await asyncio.sleep(5)
 
 

@@ -1,7 +1,17 @@
 import json
+import sys
+import argparse
 from discord.ext import commands
 
 CONFIG_FILE = 'discordbot.config'
+
+
+def get_opts(args=sys.argv[1:]):
+    parser = argparse.ArgumentParser(description="Parses bot arguments.")
+    parser.add_argument("-c", "--config", help="Specify configuration file (json format)")
+    parser.add_argument("-l", "--logging", help="Set logging level (INFO, WARNING, DEBUG)")
+    options = parser.parse_args(args)
+    return options
 
 
 def get_prefix(bot, message):
@@ -19,9 +29,9 @@ def get_prefix(bot, message):
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 
-def read_config(blob=None):
+def read_config(blob=None, file=CONFIG_FILE):
     """ Returns a config_file['blob] from requesting cogs or config_file to bot """
-    with open(CONFIG_FILE, 'r') as config_json:
+    with open(file, 'r') as config_json:
         config = json.load(config_json)
     config_json.close()
 
