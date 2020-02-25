@@ -27,7 +27,7 @@ All the features/commands of the bot alongsidetheir descriptions can be viewed i
 
 ## Contribute
 
-To contribute to this project, the following steps should be followed:
+Before you start contributing, please read our [code of conduct](https://github.com/thereaper90917/ZTM-Python-Discord-Bot-Almuni/blob/master/CODE_OF_CONDUCT.md) first. Then, the following steps should be followed:
 
 * Fork this repository
 * Clone the forked repository to your local machine
