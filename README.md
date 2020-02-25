@@ -48,7 +48,8 @@ The bot should come online in your server and you can then use any of the availa
 
 ## Contributors
 
-[![thereaper90917](https://avatars3.githubusercontent.com/u/42868546?s=150&v=4)](https://github.com/thereaper90917)
-[![jerbeck](https://avatars1.githubusercontent.com/u/432648?s=150&v=4)](https://github.com/jerbeck)
-[![solomon403](https://avatars0.githubusercontent.com/u/55158465?s=150&v=4)](https://github.com/Solomon403)
-[![emryscass](https://avatars2.githubusercontent.com/u/54422867?s=150&v=4)](https://github.com/emryscass)
+[![thereaper90917](https://avatars3.githubusercontent.com/u/42868546?s=170&v=4)](https://github.com/thereaper90917)
+[![jerbeck](https://avatars1.githubusercontent.com/u/432648?s=170&v=4)](https://github.com/jerbeck)
+[![solomon403](https://avatars0.githubusercontent.com/u/55158465?s=170&v=4)](https://github.com/Solomon403)
+[![emryscass](https://avatars2.githubusercontent.com/u/54422867?s=170&v=4)](https://github.com/emryscass)
+[<img src="https://avatars1.githubusercontent.com/u/24484139?s=60&v=4" height="170" alt="jwim">](https://github.com/jwim)
