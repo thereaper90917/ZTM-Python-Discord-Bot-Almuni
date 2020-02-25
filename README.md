@@ -16,13 +16,19 @@
 	* tinydb v3.15.2
 	* discord v1.0.1
 	* praw v6.5.1
-    * python v3.7
-    * discord.py v1.2.5
-    * requests v2.22.0
-    * beautifulsoup4 v4.8.2
+	* python v3.7
+	* discord.py v1.2.5
+	* requests v2.22.0
+	* beautifulsoup4 v4.8.2
 
 **Here are a few basic bot commands:**
 * !Beginner 
 * !Intermediate 
 * !Advanced
 
+## Contributors
+
+[![thereaper90917](https://avatars3.githubusercontent.com/u/42868546?s=150&v=4)](https://github.com/thereaper90917)
+[![jerbeck](https://avatars1.githubusercontent.com/u/432648?s=150&v=4)](https://github.com/jerbeck)
+[![solomon403](https://avatars0.githubusercontent.com/u/55158465?s=150&v=4)](https://github.com/Solomon403)
+[![emryscass](https://avatars2.githubusercontent.com/u/54422867?s=150&v=4)](https://github.com/emryscass)
