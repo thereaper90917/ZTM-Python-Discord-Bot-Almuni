@@ -1,30 +1,50 @@
 # ZTM-Python-Discord-Bot-Almuni
 
-## A Discord bot written in Python by and for the ZTM community
+A Discord bot written in Python by and for the [Zero To Mastery](https://zerotomastery.io/) community during the [Frosty February hackathon](https://github.com/zero-to-mastery/frosty-february-hackathon).
 
-### Packages we will be starting with:
-* discord.py: View documentation [here.](https://discordpy.readthedocs.io/en/latest/)
+## Goal
 
-### NOTE:
-* The latest version of discord.py is v1.3.1. Due to this, using python v3.7 and up is recommended so as to avoid errors/conflicts.
+The main goal behind this project is to help members find projects. Each project will be categorized under Beginner, Intermediate or Advanced.
 
-* The goal behind this bot is to help members find projects. Each project will be categorized under Beginner, Intermediate or Advanced.
+## Getting Started
 
-* Moderators will have the ability to scrape the web for discovering new programming projects. Each project will be ranked and then properly categorized. Beginner, Intermediate and Advanced projects will be stored as lists and accessed per user. As the user completes the projects, they will receive a score and the project will be removed from the list for that user only.
+This project was created using the latest version of discord.py. You can find the docs [here](https://discordpy.readthedocs.io/en/latest/)
 
-* Requirements:
-	* tinydb v3.15.2
-	* discord v1.0.1
-	* praw v6.5.1
-	* python v3.7
-	* discord.py v1.2.5
-	* requests v2.22.0
-	* beautifulsoup4 v4.8.2
+### Prerequisites
+* python v3.7
+* discord v1.0.1
+* discord.py v1.3.1
+* praw v6.5.1
+* tinydb v3.15.2
+* requests v2.22.0
+* beautifulsoup4 v4.8.2
 
-**Here are a few basic bot commands:**
-* !Beginner 
-* !Intermediate 
-* !Advanced
+### Running the bot locally
+
+To run the bot locally, note that you must have the modules listed in the Prerequisites section installed and will need to create your own Discord Bot account. Follow the instructions [here](https://discordpy.readthedocs.io/en/latest/discord.html) to create and invite your bot to a server.
+
+In the command line/terminal, enter the following commands:
+```
+git clone https://github.com/thereaper90917/ZTM-Python-Discord-Bot-Almuni.git
+cd ZTM-Python-Discord-Bot-Almuni
+```
+Open the files in the folder with your preferred text editor. After this, you'll need to navigate to the `discordbot.py` file and replace the config token variable with the client token provided to you after you created your bot.
+
+For example, if your token was 'abcdefgh', you'd replace:
+
+```py
+bot.run(config['token'], bot=True, reconnect=True)
+```
+with:
+
+```py
+bot.run('abcdefgh', bot=True, reconnect=True)
+```
+After doing this, save the file, go back to the terminal window and enter the following:
+
+`python3 discordbot.py`
+
+The bot should come online in your server and you can then use any of the available commands.
 
 ## Contributors
 
