@@ -53,3 +53,9 @@ The bot should come online in your server and you can then use any of the availa
 [![solomon403](https://avatars0.githubusercontent.com/u/55158465?s=170&v=4)](https://github.com/Solomon403)
 [![emryscass](https://avatars2.githubusercontent.com/u/54422867?s=170&v=4)](https://github.com/emryscass)
 [<img src="https://avatars1.githubusercontent.com/u/24484139?s=60&v=4" height="170" alt="jwim">](https://github.com/jwim)
+
+## Features
+
+All the features/commands of the bot alongsidetheir descriptions can be viewed in the screenshot below:
+
+<img src="bot-commands.png" alt="image showing bot commands">
