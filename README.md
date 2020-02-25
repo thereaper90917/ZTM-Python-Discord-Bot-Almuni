@@ -19,32 +19,23 @@ This project was created using the latest version of discord.py. You can find th
 * requests v2.22.0
 * beautifulsoup4 v4.8.2
 
-### Running the bot locally
+## Features
 
-To run the bot locally, note that you must have the modules listed in the Prerequisites section installed and will need to create your own Discord Bot account. Follow the instructions [here](https://discordpy.readthedocs.io/en/latest/discord.html) to create and invite your bot to a server.
+All the features/commands of the bot alongsidetheir descriptions can be viewed in the screenshot below:
 
-In the command line/terminal, enter the following commands:
-```
-git clone https://github.com/thereaper90917/ZTM-Python-Discord-Bot-Almuni.git
-cd ZTM-Python-Discord-Bot-Almuni
-```
-Open the files in the folder with your preferred text editor. After this, you'll need to navigate to the `discordbot.py` file and replace the config token variable with the client token provided to you after you created your bot.
+<img src="bot-commands.png" alt="image showing bot commands">
 
-For example, if your token was 'abcdefgh', you'd replace:
+## Contribute
 
-```py
-bot.run(config['token'], bot=True, reconnect=True)
-```
-with:
+To contribute to this project, the following steps should be followed:
 
-```py
-bot.run('abcdefgh', bot=True, reconnect=True)
-```
-After doing this, save the file, go back to the terminal window and enter the following:
+* Fork this repository
+* Clone the forked repository to your local machine
+* On the cloned repository, create a new branch
+* Work on a new feature, fix bugs in the code or do some code refactoring
+* Push your commits and submit a PR!
 
-`python3 discordbot.py`
-
-The bot should come online in your server and you can then use any of the available commands.
+This [article](https://akrabat.com/the-beginners-guide-to-contributing-to-a-github-project/) covers the above process in more detail.
 
 ## Contributors
 
@@ -53,9 +44,3 @@ The bot should come online in your server and you can then use any of the availa
 [![solomon403](https://avatars0.githubusercontent.com/u/55158465?s=170&v=4)](https://github.com/Solomon403)
 [![emryscass](https://avatars2.githubusercontent.com/u/54422867?s=170&v=4)](https://github.com/emryscass)
 [<img src="https://avatars1.githubusercontent.com/u/24484139?s=60&v=4" height="170" alt="jwim">](https://github.com/jwim)
-
-## Features
-
-All the features/commands of the bot alongsidetheir descriptions can be viewed in the screenshot below:
-
-<img src="bot-commands.png" alt="image showing bot commands">
