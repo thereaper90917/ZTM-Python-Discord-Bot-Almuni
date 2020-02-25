@@ -8,7 +8,7 @@ The main goal behind this project is to help members find projects. Each project
 
 ## Getting Started
 
-This project was created using the latest version of discord.py. You can find the docs [here](https://discordpy.readthedocs.io/en/latest/)
+This project was created using the latest version of discord.py. You can find the documentation [here.](https://discordpy.readthedocs.io/en/latest/)
 
 ### Prerequisites
 * python v3.7
