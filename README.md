@@ -44,3 +44,7 @@ This [article](https://akrabat.com/the-beginners-guide-to-contributing-to-a-gith
 [![solomon403](https://avatars0.githubusercontent.com/u/55158465?s=170&v=4)](https://github.com/Solomon403)
 [![emryscass](https://avatars2.githubusercontent.com/u/54422867?s=170&v=4)](https://github.com/emryscass)
 [<img src="https://avatars1.githubusercontent.com/u/24484139?s=60&v=4" height="170" alt="jwim">](https://github.com/jwim)
+
+## License
+
+Licensed under [The Unlicense.](https://github.com/thereaper90917/ZTM-Python-Discord-Bot-Almuni/blob/master/LICENSE)
