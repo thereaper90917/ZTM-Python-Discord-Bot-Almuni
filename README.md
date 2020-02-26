@@ -21,7 +21,7 @@ This project was created using the latest version of discord.py. You can find th
 
 ## Features
 
-All the features/commands of the bot alongsidetheir descriptions can be viewed in the screenshot below:
+All the features/commands of the bot alongside their descriptions can be viewed in the screenshot below:
 
 <img src="bot-commands.png" alt="image showing bot commands">
 
