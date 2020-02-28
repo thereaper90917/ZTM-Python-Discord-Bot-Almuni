@@ -21,6 +21,8 @@ class Challenges(commands.Cog):
         results = []
         for idx, item in enumerate(links):
             title = item.find('h4', class_='challengecard-title').get_text()
+            i = title.find(difficulty)
+            title = title[:i]
             href = self.site + item.get('href', None)
             r = ranks[idx].getText()
             if len(difficulty):
@@ -43,11 +45,11 @@ class Challenges(commands.Cog):
         return challenges
 
     @staticmethod
-    def create_embed(self, results):
+    def create_embed(results):
         r = random.choice(results)
         embed = discord.Embed(
             colour=discord.Colour.dark_grey(),
-            title=f"{r['title']}",
+            title=f"{r['title']} | Difficulty: {r['rank']}",
             description=f"{r['link']}"
         )
         return embed
@@ -64,7 +66,6 @@ class Challenges(commands.Cog):
         """ Gets a set of intermediate exercises to work on"""
         results = self.get_results('Medium')
         embed = self.create_embed(results)
-        await ctx.send(embed)
         await ctx.send(embed=embed)
 
     @commands.command(name='advanced', aliases=['!advanced', '!Advanced'])
@@ -72,7 +73,6 @@ class Challenges(commands.Cog):
         """ Gets a set of advanced exercises to work on"""
         results = self.get_results('Hard')
         embed = self.create_embed(results)
-        await ctx.send(embed)
         await ctx.send(embed=embed)
 
 
