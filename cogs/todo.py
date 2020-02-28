@@ -1,5 +1,6 @@
 import sqlite3
 import discord
+import utils
 from discord.ext import commands
 
 import praw
@@ -22,7 +23,8 @@ class Test(commands.Cog):
     """ Cog to add items to a To-do list (broken right now) """
     def __init__(self, bot):
         self.bot = bot
-        self.db = '../database.db'
+        self.config = utils.read_config('todo_config')
+        self.db = self.config['database']
         self.conn = sqlite3.connect(self.db)
         self.c = self.conn.cursor()
 

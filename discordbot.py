@@ -9,7 +9,7 @@ CONFIG_FILE = 'discordbot.config'
 
 options = utils.get_opts(sys.argv[1:])
 
-if not utils.check_log('logs'):
+if not utils.check_dir('logs'):
     os.mkdir('logs')
 else:
     logger = logging.getLogger('discord')
