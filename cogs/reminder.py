@@ -3,6 +3,7 @@ from discord.ext import commands
 import asyncio
 import time
 import logging
+import utils
 from tinydb import TinyDB
 
 logger = logging.getLogger("reminders")
@@ -13,7 +14,8 @@ class Reminder(commands.Cog):
 
     def __init__(self, bot, loop=asyncio):
         self.bot = bot
-        self.reminders = TinyDB('data/reminders.db')
+        self.config = utils.read_config('reminder_config')
+        self.reminders = TinyDB(self.config['database'])
         self.units = {"m": 60,
                       "h": 3600,
                       "d": 86400,

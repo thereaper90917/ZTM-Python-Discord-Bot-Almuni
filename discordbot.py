@@ -2,18 +2,22 @@ import discord
 import logging
 from discord.ext import commands
 import utils
-import argparse
 import sys
+import os
 
 CONFIG_FILE = 'discordbot.config'
 
 options = utils.get_opts(sys.argv[1:])
 
-logger = logging.getLogger('discord')
-logger.setLevel(logging.INFO)   # Change this to get DEBUG info if necessary
-handler = logging.FileHandler(filename='logs/discordbot.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
+if not utils.check_dir('logs'):
+    os.mkdir('logs')
+else:
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.INFO)   # Change this to get DEBUG info if necessary
+    handler = logging.FileHandler(filename='logs/discordbot.log', encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
+
 
 if options.config:
     config = utils.read_config(file=options.config)

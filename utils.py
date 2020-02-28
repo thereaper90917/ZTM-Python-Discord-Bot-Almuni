@@ -1,6 +1,7 @@
 import json
 import sys
 import argparse
+import os
 from discord.ext import commands
 
 CONFIG_FILE = 'discordbot.config'
@@ -38,3 +39,7 @@ def read_config(blob=None, file=CONFIG_FILE):
     if blob:
         return config[blob]
     return config
+
+
+def check_dir(x='logs'):
+    return True if (os.path.isdir(os.getcwd() + '/' + x)) else False
