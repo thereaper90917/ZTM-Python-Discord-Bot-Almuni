@@ -1,3 +1,4 @@
+hyper
 tinydb
 discord
 discord.py
