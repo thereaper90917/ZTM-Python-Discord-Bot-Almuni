@@ -19,7 +19,7 @@ class Database:
         return '{} {}'.format(self.need, self.command)
 
 
-class Test(commands.Cog):
+class Todo(commands.Cog):
     """ Cog to add items to a To-do list (broken right now) """
     def __init__(self, bot):
         self.bot = bot
@@ -27,6 +27,11 @@ class Test(commands.Cog):
         self.db = self.config['database']
         self.conn = sqlite3.connect(self.db)
         self.c = self.conn.cursor()
+        self.create_tables()
+
+    def create_tables(self):
+        with self.conn:
+            self.c.execute("CREATE TABLE if not exists needs(need, command, complete, completed, working)")
 
     def insert_emp(self, emp):
         with self.conn:
@@ -53,7 +58,7 @@ class Test(commands.Cog):
     @commands.command(name='todo')
     async def todo(self, ctx, *args):
         """ Add a needed to-do item to the list of bots needs """
-        if len(args) < 2:
+        if len(args) < 1:
             await ctx.send("Usage: !todo <add/remote/view/update> <task>")
             print("working")
 
@@ -112,4 +117,4 @@ class Test(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Test(bot))
+    bot.add_cog(Todo(bot))
