@@ -18,6 +18,7 @@ This project was created using the latest version of discord.py. You can find th
 * tinydb v3.15.2
 * requests v2.22.0
 * beautifulsoup4 v4.8.2
+* hyper v0.7.0
 
 ## Features
 
