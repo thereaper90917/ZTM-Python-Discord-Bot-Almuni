@@ -108,8 +108,7 @@ class Reminder(commands.Cog):
                     id_list.append(str(reminder.doc_id))
                     time_list.append(reminder['time'])
                     msg_list.append(reminder['message'])
-                else:
-                    return
+        if len(id_list) > 0:
             embed = discord.Embed(colour=discord.Colour.dark_grey(), title="Reminders")
             embed.add_field(name='#',
                             value=str(id_list).replace(',', '\n').replace('[', '').replace(']', '').replace('\'', ''),

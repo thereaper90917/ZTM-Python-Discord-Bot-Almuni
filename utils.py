@@ -7,7 +7,9 @@ from discord.ext import commands
 CONFIG_FILE = 'discordbot.config'
 
 
-def get_opts(args=sys.argv[1:]):
+def get_opts(args=None):
+    if args is None:
+        args = sys.argv[1:]
     parser = argparse.ArgumentParser(description="Parses bot arguments.")
     parser.add_argument("-c", "--config", help="Specify configuration file (json format)")
     parser.add_argument("-l", "--logging", help="Set logging level (INFO, WARNING, DEBUG)")

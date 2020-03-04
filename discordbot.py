@@ -27,7 +27,7 @@ logger.info(f'Reading Configuration file: {config}')
 
 
 logger.info('Starting bot...')
-bot = commands.Bot(command_prefix=utils.get_prefix, description=config['description'])
+bot = commands.Bot(command_prefix=utils.get_prefix, description=config['description'], owner_ids=config['owner_ids'])
 
 # Loading cogs
 if __name__ == '__main__':
@@ -55,9 +55,5 @@ async def on_member_join(member):
 async def on_member_remove(member):
     print(f'{member} has left the server')
 
-
-@bot.command()
-async def gn(ctx):
-    exit()
 
 bot.run(config['token'], bot=True, reconnect=True)
